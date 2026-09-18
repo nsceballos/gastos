@@ -3,6 +3,7 @@ import { ZodError, type ZodType } from "zod";
 import { cookies } from "next/headers";
 import { authEnabled, SESSION_COOKIE, verifySessionToken } from "./auth";
 import { NotFoundError } from "./db";
+import { HttpError } from "./errors";
 
 /**
  * Helpers para route handlers (src/app/api/**).
@@ -16,15 +17,7 @@ import { NotFoundError } from "./db";
  * - Verifica la sesión (cookie) en cada request.
  * - Convierte errores en JSON {error} con status adecuado.
  */
-export class HttpError extends Error {
-  constructor(
-    public status: number,
-    message: string,
-    public details?: unknown,
-  ) {
-    super(message);
-  }
-}
+export { HttpError };
 
 type Ctx = { params: Promise<Record<string, string>> };
 type Handler = (req: Request, ctx: Ctx) => Promise<unknown>;
