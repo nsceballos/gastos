@@ -10,7 +10,7 @@
  *  - Cuotas: N transacciones (una por mes), cada una en su resumen.
  */
 import { randomUUID } from "node:crypto";
-import { HttpError } from "../api";
+import { HttpError } from "../errors";
 import type { Db } from "../db";
 import type {
   Account,

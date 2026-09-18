@@ -8,7 +8,7 @@
  *   Al pagar: se crea un `card_payment` (banco -> tarjeta) y los consumos pasan a
  *   "posted" con effective_date = fecha de pago.
  */
-import { HttpError } from "../api";
+import { HttpError } from "../errors";
 import type { Db } from "../db";
 import type { Account, CardStatement, Transaction } from "../types";
 import { addDays, daysInMonth, round2, todayISO } from "./core";

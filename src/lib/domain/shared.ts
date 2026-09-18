@@ -17,7 +17,7 @@
  *  - balance = paid_by_me - my_share.  > 0: la pareja me debe.  < 0: yo le debo.
  */
 import { z } from "zod";
-import { HttpError } from "../api";
+import { HttpError } from "../errors";
 import type { Db } from "../db";
 import type { Account, Category, Settlement, Transaction } from "../types";
 import { addDays, myShareAmount, round2, sum, todayISO } from "./core";
