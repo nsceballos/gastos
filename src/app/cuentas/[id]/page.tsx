@@ -74,7 +74,7 @@ function StatementBlock({
           <div key={t.id} className="flex items-center justify-between gap-2 py-1.5 text-sm">
             <span className="min-w-0 flex-1 truncate">
               <span className="text-muted">{formatDate(t.date)}</span> · {t.note || "Consumo"}
-              {t.installment_number && ` (${t.installment_number}/${t.installments_total})`}
+              {t.installment_number && !/cuota/i.test(t.note) && ` (${t.installment_number}/${t.installments_total})`}
             </span>
             <span className="tabular-nums">{formatMoney(t.amount, t.currency)}</span>
           </div>

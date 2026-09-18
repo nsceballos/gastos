@@ -74,21 +74,31 @@ export function isCreditCard(acc: Pick<Account, "type"> | null | undefined): boo
 }
 
 /**
- * Gasto "comprometido": todo expense por fecha de compra, incluyendo consumos de tarjeta
- * pendientes. Es lo que se usa para presupuesto cuando `budget_counts_pending_card = true`.
+ * ¿Es un gasto mío? Los gastos compartidos que pagó la pareja (`paid_by = "partner"`)
+ * se registran contra la cuenta virtual "partner" y NO cuentan como gasto mío: mi parte
+ * se salda en la liquidación con la pareja (que genera su propio movimiento).
+ * Regla: "gasto = plata que salió (o va a salir) de mis cuentas".
+ */
+export function isMyExpense(tx: Transaction): boolean {
+  return tx.type === "expense" && tx.paid_by !== "partner";
+}
+
+/**
+ * Gasto "comprometido": todo expense mío por fecha de compra, incluyendo consumos de
+ * tarjeta pendientes. Es lo que se usa para presupuesto cuando `budget_counts_pending_card = true`.
  */
 export function isCommittedExpense(tx: Transaction): boolean {
-  return tx.type === "expense";
+  return isMyExpense(tx);
 }
 
 /**
  * Gasto "efectivo": salida real de dinero.
- *  - expense con status posted (efectivo / débito / o consumo de tarjeta ya pagado)
+ *  - expense mío con status posted (efectivo / débito / o consumo de tarjeta ya pagado)
  *  - NO incluye card_payment (sería doble conteo con los consumos ya posteados)
- *  - NO incluye pending_card
+ *  - NO incluye pending_card ni gastos pagados por la pareja
  */
 export function isEffectiveExpense(tx: Transaction): boolean {
-  return tx.type === "expense" && tx.status === "posted";
+  return isMyExpense(tx) && tx.status === "posted";
 }
 
 /** Fecha con la que un gasto efectivo impacta el cashflow. */

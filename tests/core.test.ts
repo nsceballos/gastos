@@ -38,3 +38,11 @@ describe("core", () => {
     expect(accountBalance(bank, txs)).toBe(700);
   });
 });
+
+describe("gastos pagados por la pareja", () => {
+  it("no cuentan como gasto mío (ni efectivo ni comprometido)", () => {
+    const t = tx({ is_shared: true, paid_by: "partner", status: "posted" });
+    expect(isEffectiveExpense(t)).toBe(false);
+    expect(expensesForBudget([t], "2026-09-01", "2026-09-30", { budget_counts_pending_card: true }).length).toBe(0);
+  });
+});
